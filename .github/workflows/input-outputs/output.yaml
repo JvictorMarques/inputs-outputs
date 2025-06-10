@@ -1,0 +1,37 @@
+name: Utilizando Outputs no GitHub Actions
+on:
+  workflow_dispatch:
+
+jobs:
+  gerando_output:
+    runs-on: ubuntu-latest
+    outputs:
+      output_random_number: ${{ steps.random_number.outputs.random_number }}
+      output_random_password: ${{ steps.generatedpassword.outputs.password }}
+    steps:
+      - name: Gerando número aleatório
+        id: random_number
+        run: |
+          echo "Gerando número aleatório..."
+          RANDOM_NUMBER=$((RANDOM % 100))
+          echo "Número aleatório gerado: $RANDOM_NUMBER"
+          echo "random_number=$RANDOM_NUMBER" >> $GITHUB_OUTPUT
+      - name: Exibindo número aleatório
+        run: |
+          echo "Número aleatório gerado: ${{ steps.random_number.outputs.random_number }}"
+      - name: Gerar senha com action personalizada
+        id: generatedpassword
+        uses: aammirmirza/RandomPasswordGenerator@v1.1
+        with:
+          length: 15
+      - name: Exibir senha gerada
+        run: |
+          echo "Senha gerada: ${{ steps.generatedpassword.outputs.password }}"
+  exibindo_outputs:
+    runs-on: ubuntu-latest
+    needs: gerando_output
+    steps:
+      - name: Mostrando os valores dos outputs
+        run: |
+          echo "Output número aleatório: ${{ needs.gerando_output.outputs.output_random_number }}"
+          echo "Output senha aleatória: ${{ needs.gerando_output.outputs.output_random_password }}"

@@ -1,0 +1,37 @@
+name: Uso de variaveis no Github Actions
+on: 
+  workflow_dispatch
+env:
+  workflow_environment: "variavel_global"
+
+jobs:
+  job1:
+    runs-on: ubuntu-latest
+    env:
+      job_environment: "variavel_job"
+
+    steps:
+      - name: Exibir variaveis
+        env:
+          step_environment: "variavel_step"
+        run: |
+          echo "Variavel Global: $workflow_environment"
+          echo "Variavel do Job: $job_environment"
+          echo "Variavel do Step: $step_environment"
+
+      - name: Testando a variavel do step1
+        run: |
+          echo "Variavel Global: $workflow_environment"
+          echo "Variavel do Job: $job_environment"
+          echo "Variavel do Step: $step_environment"
+
+  job2:
+    runs-on: ubuntu-latest
+    needs: job1
+
+    steps:
+      - name: Testando a variavel do job1
+        run: |
+          echo "Variavel Global: $workflow_environment"
+          echo "Variavel do Job: $job_environment"
+          echo "Variavel do Step: $step_environment"

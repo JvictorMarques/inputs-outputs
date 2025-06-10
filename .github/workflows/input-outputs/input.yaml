@@ -1,0 +1,41 @@
+name: Utilizando Inputs no GitHub Actions
+on:
+  workflow_dispatch:
+    inputs:
+      versao:
+        type: string
+        required: true
+        description: 'Versão da nova Release'
+      numero_card:
+        type: number
+        required: true
+        description: 'Número do Card do Projeto'
+      isDeploy:
+        type: boolean
+        required: true
+        default: false
+        description: 'É um Deploy?'
+      ambiente:
+        type: choice
+        required: true
+        default: 'dev'
+        description: 'Ambiente de Deploy'
+        options:
+          - dev
+          - staging
+          - prod
+
+jobs:
+  display_inputs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Exibindo o Contexto de Inputs
+        run: |
+          echo "Contexto de Inputs:"
+          echo "${{ toJson(inputs) }}"
+      - name: Exibir os Input
+        run: |
+          echo "Versão: ${{ inputs.versao }}"
+          echo "Número do Card: ${{ inputs.numero_card }}"
+          echo "É Deploy? ${{ inputs.isDeploy }}"
+          echo "Ambiente: ${{ inputs.ambiente }}"

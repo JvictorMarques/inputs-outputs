@@ -1,0 +1,10 @@
+name: Exibindo as Variáveis do Repositório
+on: 
+  workflow_dispatch:
+jobs:
+  vars:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "${{ vars.VARIAVEL_TESTE }}"
+
+      - run: echo "${{ toJson(vars)}}"
